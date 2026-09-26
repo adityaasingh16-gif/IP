@@ -1,0 +1,16 @@
+{
+  "studentId": "TCET2026CS001",
+  "name": "Demo Student",
+  "email": "demo@college.edu",
+  "phone": "9876543210",
+  "department": "Computer Engineering",
+  "year": 3,
+  "semester": 5,
+  "attendance": 88,
+  "marks": [
+    {"subject": "DBMS", "marks": 87},
+    {"subject": "Operating Systems", "marks": 82},
+    {"subject": "Java", "marks": 91}
+  ],
+  "achievements": ["Technical Hackathon"]
+}

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="IP — Intelligent Student Performance & Track Record Dashboard">
+  <title>IP — Student Track Record</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand"><span class="brand-mark">IP</span><div><strong>IP</strong><small>Student Intelligence</small></div></div>
+      <nav>
+        <a class="active" href="#dashboard" data-section="dashboard">⌂ <span>Dashboard</span></a>
+        <a href="#students" data-section="students">◉ <span>Students</span></a>
+        <a href="#departments" data-section="departments">▦ <span>Departments</span></a>
+        <a href="#reports" data-section="reports">▤ <span>Reports</span></a>
+        <a href="#settings" data-section="settings">⚙ <span>Settings</span></a>
+      </nav>
+      <div class="sidebar-bottom">College Track Record<br><small>IP v2.0 • Demo Ready</small></div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+        <div><p class="eyebrow">COLLEGE INTELLIGENCE PLATFORM</p><h1 id="pageTitle">Student Dashboard</h1></div>
+        <div class="top-actions"><span class="mode-badge" id="modeBadge">● Demo Mode</span><button class="secondary" onclick="toggleTheme()">◐ Theme</button><button class="primary" onclick="openModal()">＋ Add Student</button></div>
+      </header>
+
+      <section id="dashboard" class="section active-section">
+        <div class="hero"><div><p class="eyebrow">ACADEMIC OVERVIEW</p><h2>Track performance. Spot risks. Take action.</h2><p>Monitor attendance, marks, departments and student activity from one dashboard.</p></div><button class="secondary" onclick="seedDemoData()">↻ Refresh Demo Data</button></div>
+        <section class="stats">
+          <div class="stat"><span>Total Students</span><strong id="totalStudents">0</strong><small id="studentTrend">Live records</small></div>
+          <div class="stat"><span>Departments</span><strong id="totalDepartments">0</strong><small>Academic groups</small></div>
+          <div class="stat"><span>Avg. Attendance</span><strong id="avgAttendance">0%</strong><small id="attendanceStatus">Across all students</small></div>
+          <div class="stat"><span>Avg. Marks</span><strong id="avgMarks">0%</strong><small>Academic performance</small></div>
+        </section>
+        <div class="grid-2">
+          <section class="panel"><div class="panel-head"><div><h2>Performance Snapshot</h2><p>Department-level academic overview.</p></div></div><div id="departmentBars" class="bars"></div></section>
+          <section class="panel"><div class="panel-head"><div><h2>Attention Required</h2><p>Students with low attendance or marks.</p></div><span class="risk-count" id="riskCount">0</span></div><div id="riskList" class="risk-list"></div></section>
+        </div>
+        <section class="panel"><div class="panel-head"><div><h2>Recent Student Records</h2><p>Latest records available in the system.</p></div><button class="link-btn" onclick="showSection('students')">View all →</button></div><div class="table-wrap"><table><thead><tr><th>Student</th><th>Department</th><th>Year</th><th>Attendance</th><th>Marks</th><th>Status</th></tr></thead><tbody id="recentTable"></tbody></table></div></section>
+      </section>
+
+      <section id="students" class="section">
+        <section class="panel"><div class="panel-head"><div><h2>Student Records</h2><p>Search, filter, view and manage the complete student register.</p></div><div class="filters"><input id="searchInput" type="search" placeholder="Search name, ID or email..." oninput="renderStudents()"><select id="departmentFilter" onchange="renderStudents()"><option value="">All Departments</option></select><select id="riskFilter" onchange="renderStudents()"><option value="">All Status</option><option value="risk">Needs Attention</option><option value="good">Good Standing</option></select></div></div><div class="table-wrap"><table><thead><tr><th>Student</th><th>Department</th><th>Year / Sem</th><th>Attendance</th><th>Marks</th><th>Status</th><th>Actions</th></tr></thead><tbody id="studentTable"></tbody></table><div id="emptyState" class="empty">No student records found.</div></div></section>
+      </section>
+
+      <section id="departments" class="section">
+        <div class="section-intro"><div><p class="eyebrow">ACADEMIC STRUCTURE</p><h2>Department Analytics</h2><p>Compare student counts and academic indicators without ranking departments.</p></div></div>
+        <div id="departmentCards" class="dept-grid"></div>
+      </section>
+
+      <section id="reports" class="section">
+        <div class="section-intro"><div><p class="eyebrow">REPORT CENTER</p><h2>Demo Reports</h2><p>Generate a printable summary or export the current student register as CSV.</p></div><div class="report-actions"><button class="secondary" onclick="exportCSV()">⇩ Export CSV</button><button class="primary" onclick="printReport()">▣ Print Report</button></div></div>
+        <div class="report-grid"><section class="panel report-card"><h3>College Performance Report</h3><div id="reportSummary"></div></section><section class="panel report-card"><h3>Attendance Health</h3><div class="big-number" id="reportAttendance">0%</div><p>Average attendance across the current dataset.</p><div class="progress"><span id="reportAttendanceBar"></span></div></section><section class="panel report-card"><h3>Academic Health</h3><div class="big-number" id="reportMarks">0%</div><p>Average marks among students with marks data.</p><div class="progress"><span id="reportMarksBar"></span></div></section><section class="panel report-card"><h3>Student Status</h3><div id="statusSummary"></div></section></div>
+      </section>
+
+      <section id="settings" class="section"><section class="panel settings-panel"><p class="eyebrow">SYSTEM</p><h2>Settings</h2><div class="setting-row"><div><strong>Data mode</strong><p>Use the Spring Boot API when available, otherwise keep demo records in this browser.</p></div><label class="switch"><input id="demoToggle" type="checkbox" checked onchange="setDemoMode(this.checked)"><span></span></label></div><div class="setting-row"><div><strong>Local data</strong><p>Clear only the demo records stored in this browser.</p></div><button class="danger-btn" onclick="clearDemoData()">Clear Demo Data</button></div></section></section>
+
+      <div id="toast" role="status"></div>
+    </main>
+  </div>
+
+  <div class="modal" id="studentModal"><div class="modal-card"><div class="modal-head"><div><p class="eyebrow">STUDENT RECORD</p><h2 id="modalTitle">Add Student</h2></div><button class="close" onclick="closeModal()">×</button></div><form id="studentForm"><input type="hidden" id="recordId"><div class="form-grid"><label>Student ID<input id="studentId" required placeholder="IP2026CS001"></label><label>Full Name<input id="name" required placeholder="Student name"></label><label>Email<input id="email" type="email" placeholder="student@college.edu"></label><label>Phone<input id="phone" pattern="[0-9]{10}" placeholder="9876543210"></label><label>Department<select id="department" required></select></label><label>Year<input id="year" type="number" min="1" max="4" value="1" required></label><label>Semester<input id="semester" type="number" min="1" max="8" value="1" required></label><label>Attendance %<input id="attendance" type="number" min="0" max="100" step="0.1" value="75" required></label><label>Average Marks %<input id="marksInput" type="number" min="0" max="100" step="0.1" value="75"></label><label class="wide">Achievements<input id="achievements" placeholder="Hackathon finalist, club member"></label></div><div class="modal-actions"><button type="button" class="secondary" onclick="closeModal()">Cancel</button><button type="submit" class="primary">Save Student</button></div></form></div></div>
+
+  <div class="modal" id="viewModal"><div class="modal-card detail-card"><div class="modal-head"><div><p class="eyebrow">STUDENT PROFILE</p><h2 id="viewName">Student</h2></div><button class="close" onclick="closeView()">×</button></div><div id="viewContent"></div></div></div>
+  <script src="script.js"></script>
+</body>
+</html>
